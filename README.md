@@ -14,6 +14,10 @@ An 18-slide interactive pitch deck for the Customer Success Manager role at Migh
 
 Single static HTML file. GSAP for animations. wordcloud2.js for the descriptor cloud on slide 15. DM Serif Display + Fraunces + Geist + Geist Mono via Google Fonts.
 
+## Sample work
+
+**[Sample renewal review](https://izzydoesizzy.github.io/mighty-renewal-sample/)** — what a renewal walk-through with an at-risk Mighty Pro host could look like. Sample data, real structure and questions. Built to show the kind of diagnostic + partnership conversation I'd run at renewal time. Toggle thriving / at-risk in the top-right.
+
 ## Slide order
 
 1. Title
