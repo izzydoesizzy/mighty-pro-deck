@@ -691,6 +691,27 @@
     height: 100%;
     filter: drop-shadow(0 0 60px rgba(168, 179, 255, 0.12));
   }
+  .cloud-container canvas.is-hovering { cursor: pointer; }
+  .cloud-hover-word {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+    transform-origin: center center;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+    filter: brightness(1.18) saturate(1.12) drop-shadow(0 0 18px currentColor);
+    transition: opacity 160ms ease, transform 180ms cubic-bezier(.2, .7, .3, 1.2);
+    will-change: transform, opacity;
+  }
+  .cloud-hover-word.is-active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.18);
+  }
 
   /* Wall slide override — compress to fit one viewport, no scroll */
   .slide.wall {
@@ -1460,6 +1481,7 @@
     </div>
     <div class="cloud-container">
       <canvas id="word-cloud-canvas"></canvas>
+      <span class="cloud-hover-word" aria-hidden="true"></span>
     </div>
     <div class="subtitle" style="margin-top: 14px; font-size: 13px;">The words people use most when describing my work. Filtered for descriptors, not subject matter.</div>
   </section>
@@ -1626,6 +1648,15 @@
 
   const CLOUD_PALETTE = ['#FFD4A8', '#FFB8D9', '#D4A5FF', '#B8C2FF', '#A8B3FF', '#7C5BFF'];
 
+  function colorForWeight(weight) {
+    if (weight >= 25) return CLOUD_PALETTE[0];
+    if (weight >= 17) return CLOUD_PALETTE[1];
+    if (weight >= 12) return CLOUD_PALETTE[2];
+    if (weight >= 9)  return CLOUD_PALETTE[3];
+    if (weight >= 6)  return CLOUD_PALETTE[4];
+    return CLOUD_PALETTE[5];
+  }
+
   // Seeded PRNG so the cloud renders the same shape every load
   function seededRandom(seed) {
     return function () {
@@ -1656,6 +1687,30 @@
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
 
+    const overlay = container.querySelector('.cloud-hover-word');
+    let currentHoverWord = null;
+    function handleCloudHover(item, dimension) {
+      if (!overlay) return;
+      if (item && dimension) {
+        const word = item[0];
+        const weight = item[1];
+        if (word === currentHoverWord) return;
+        currentHoverWord = word;
+        const fontPx = Math.pow(weight, 1.05) * (w / 680);
+        overlay.textContent = word;
+        overlay.style.color = colorForWeight(weight);
+        overlay.style.fontSize = fontPx + 'px';
+        overlay.style.left = (dimension.x + dimension.w / 2) + 'px';
+        overlay.style.top = (dimension.y + dimension.h / 2) + 'px';
+        overlay.classList.add('is-active');
+        canvas.classList.add('is-hovering');
+      } else {
+        currentHoverWord = null;
+        overlay.classList.remove('is-active');
+        canvas.classList.remove('is-hovering');
+      }
+    }
+
     // Swap in seeded RNG just for this render so layout is deterministic
     const originalRandom = Math.random;
     Math.random = seededRandom(7);
@@ -1669,13 +1724,9 @@
           return Math.pow(size, 1.05) * (w / 680);
         },
         color: function (word, weight) {
-          if (weight >= 25) return CLOUD_PALETTE[0];
-          if (weight >= 17) return CLOUD_PALETTE[1];
-          if (weight >= 12) return CLOUD_PALETTE[2];
-          if (weight >= 9)  return CLOUD_PALETTE[3];
-          if (weight >= 6)  return CLOUD_PALETTE[4];
-          return CLOUD_PALETTE[5];
+          return colorForWeight(weight);
         },
+        hover: handleCloudHover,
         rotateRatio: 0.35,
         rotationSteps: 2,
         backgroundColor: 'transparent',
