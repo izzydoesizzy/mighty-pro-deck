@@ -17,22 +17,22 @@ Single static HTML file. GSAP for animations. wordcloud2.js for the descriptor c
 ## Slide order
 
 1. Title
-2. At a Glance (metric bullets)
+2. The Rare Blend
 3. Video Reel
-4. The Rare Blend
-5. The 60-Host Scale
-6. Outcomes Report
-7. The Implementation Muscle
-8. The Negotiation Muscle
-9. System-Builder DNA
-10. The Engineers Said
-11. Executive Room
-12. Build from Nothing
-13. 90 Days, One Bet
-14. A Fun New Addition
-15. The Pattern (descriptor word cloud from 377 testimonials)
-16. The Dutchie Wall (8 verbatim testimonials)
-17. Clients, Workshops, Community (8 verbatim testimonials)
+4. At a Glance (metric bullets)
+5. Build from Nothing
+6. The 60-Host Scale
+7. Outcomes Report
+8. The Implementation Muscle
+9. The Negotiation Muscle
+10. System-Builder DNA
+11. The Engineers Said
+12. Executive Room
+13. The Pattern (descriptor word cloud from 377 testimonials)
+14. The Dutchie Wall (8 verbatim testimonials)
+15. Clients, Workshops, Community (8 verbatim testimonials)
+16. 90 Days, One Bet
+17. A Fun New Addition
 18. Recap + Sign-off
 
 ## Contact
