@@ -811,8 +811,6 @@
     color: transparent;
     transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
                 transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    min-width: 280px;
-    text-align: left;
     will-change: opacity, transform;
   }
   .hero-rotating-word.out {
@@ -1542,18 +1540,19 @@
 
   // Rotating identity text on title slide
   const ROTATING_WORDS = [
-    'negotiator.',
     'coach.',
-    'systems builder.',
     'community builder.',
+    'systems builder.',
+    'negotiator.',
     'mentor.',
-    'closer.',
-    'host.',
     'strategist.',
-    'CSM.',
+    'storyteller.',
+    'AI builder.',
     'team trainer.',
-    'problem solver.',
+    'host.',
     'playbook author.',
+    'connector.',
+    'CSM.',
   ];
   (function initRotatingWord() {
     const el = document.getElementById('rotating-word');
