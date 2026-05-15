@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Izzy Piyale-Sheard · For Mighty Pro · Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,400&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+<style>
+  :root {
+    --bg-deep: #07050F;
+    --bg-mid: #0E0820;
+    --bg-soft: #14102A;
+    --panel: rgba(28, 22, 56, 0.45);
+    --panel-border: rgba(168, 179, 255, 0.14);
+    --ink-bright: #F4F0FF;
+    --ink-soft: #C9C4E6;
+    --ink-muted: #837DA8;
+    --accent: #A8B3FF;
+    --accent-bright: #B8C2FF;
+    --accent-glow: rgba(168, 179, 255, 0.25);
+    --violet: #7C5BFF;
+    --grid: rgba(168, 179, 255, 0.06);
+    --grad-1: #A8B3FF;
+    --grad-2: #D4A5FF;
+    --grad-3: #FFB8D9;
+    --grad-4: #FFD4A8;
+    --slide-glow: rgba(168, 179, 255, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Geist', sans-serif;
+    background: var(--bg-deep);
+    color: var(--ink-soft);
+    line-height: 1.65;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Atmospheric background */
+  .atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: var(--bg-deep);
+    overflow: hidden;
+  }
+  .atmosphere::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1600px;
+    height: 1600px;
+    background: radial-gradient(ellipse at center,
+      var(--slide-glow) 0%,
+      rgba(124, 91, 255, 0.08) 30%,
+      transparent 60%);
+    filter: blur(80px);
+    transition: background 1.4s ease;
+    will-change: background;
+  }
+  .atmosphere::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    opacity: 0.5;
+  }
+
+  .stars {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+  }
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 4s infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 0.8; transform: scale(1); }
+  }
+
+  .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 80px 100px;
+    opacity: 0;
+    transform: translateX(60px);
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+  .slide.prev { transform: translateX(-60px); }
+
+  .slide-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    margin-bottom: 28px;
+    padding: 8px 18px;
+    border: 1px solid var(--panel-border);
+    border-radius: 100px;
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+  }
+  .slide h1 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 88px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-align: center;
+    max-width: 1200px;
+    background: linear-gradient(120deg, var(--grad-4) 0%, var(--grad-3) 30%, var(--grad-2) 65%, var(--grad-1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 0 60px rgba(168, 179, 255, 0.25));
+    margin-bottom: 28px;
+  }
+  .slide h1 em, .slide h1 .accent {
+    font-style: italic;
+    background: linear-gradient(120deg, var(--grad-1), var(--grad-2), var(--grad-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .slide h2 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    font-size: clamp(28px, 4vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    text-align: center;
+    max-width: 1100px;
+    background: linear-gradient(115deg, var(--grad-4) 0%, var(--grad-3) 30%, var(--grad-2) 65%, var(--grad-1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 24px;
+  }
+  .slide h2 em {
+    font-style: italic;
+    background: linear-gradient(120deg, var(--grad-1), var(--grad-2), var(--grad-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .slide .subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-soft);
+    text-align: center;
+    max-width: 800px;
+    margin-bottom: 40px;
+    line-height: 1.4;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    width: 100%;
+    margin-top: 24px;
+  }
+  .stat-tile {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 18px;
+    padding: 32px 24px;
+    backdrop-filter: blur(20px);
+    text-align: center;
+  }
+  .stat-tile .label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    margin-bottom: 12px;
+  }
+  .stat-tile .num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(48px, 5vw, 72px);
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 14px;
+    letter-spacing: -0.03em;
+  }
+  .stat-tile .body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  .pullquote {
+    border-left: 3px solid var(--accent);
+    padding: 24px 0 24px 32px;
+    max-width: 900px;
+    margin: 24px 0;
+  }
+  .pullquote p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(20px, 2.2vw, 30px);
+    line-height: 1.45;
+    color: var(--ink-bright);
+    margin-bottom: 16px;
+    min-height: 1.4em;
+  }
+  .pullquote cite {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-style: normal;
+  }
+  .quotes-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 24px;
+  }
+  .quotes-pair .pullquote { margin: 0; }
+  .quotes-pair .pullquote p { font-size: clamp(16px, 1.6vw, 22px); }
+
+  .slide-portrait {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    margin-bottom: 36px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(168, 179, 255, 0.15), rgba(255, 184, 217, 0.1));
+    border: 2px solid rgba(168, 179, 255, 0.45);
+    position: relative;
+    box-shadow: 0 0 120px rgba(168, 179, 255, 0.45), 0 0 40px rgba(212, 165, 255, 0.35);
+  }
+  .slide-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+  }
+  .slide-portrait::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, transparent 40%, rgba(168, 179, 255, 0.12) 100%);
+    pointer-events: none;
+  }
+
+  /* Video reel slide */
+  .reel-frame {
+    position: relative;
+    width: 100%;
+    max-width: 980px;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(168, 179, 255, 0.25);
+    box-shadow: 0 30px 100px -30px rgba(124, 91, 255, 0.55), 0 0 80px rgba(168, 179, 255, 0.25);
+    background: var(--bg-soft);
+    margin-top: 8px;
+  }
+  .reel-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .reel-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-top: 18px;
+    text-align: center;
+  }
+  .reel-meta a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(168, 179, 255, 0.3);
+    padding-bottom: 2px;
+    margin-left: 8px;
+  }
+
+  /* Career timeline */
+  .timeline {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 30px;
+    padding-top: 28px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6%;
+    right: 6%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-glow) 12%, var(--accent-glow) 88%, transparent);
+  }
+  .timeline-node {
+    position: relative;
+    text-align: center;
+    padding-top: 26px;
+  }
+  .timeline-node::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 14px var(--accent-glow), 0 0 28px rgba(168, 179, 255, 0.35);
+  }
+  .timeline-years {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    margin-bottom: 8px;
+  }
+  .timeline-name {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(20px, 2.2vw, 28px);
+    background: linear-gradient(120deg, var(--grad-3), var(--grad-1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .timeline-body {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  .hero-ask {
+    display: flex;
+    gap: 56px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 32px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-muted);
+  }
+  .hero-ask div span {
+    display: block;
+    color: var(--ink-bright);
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    margin-top: 6px;
+  }
+
+  .mega-number {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(140px, 22vw, 320px);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    background: linear-gradient(120deg, var(--grad-4) 0%, var(--grad-3) 30%, var(--grad-2) 65%, var(--grad-1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 0 100px rgba(212, 165, 255, 0.5));
+    text-align: center;
+  }
+
+  .polaroid-wall {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: min-content;
+    gap: 14px;
+    max-width: 1300px;
+    width: 100%;
+    margin-top: 16px;
+  }
+  .polaroid {
+    background: linear-gradient(180deg, #FBF6EC 0%, #F2EAD8 100%);
+    padding: 10px 10px 16px;
+    border-radius: 4px;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5), 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+  }
+  .polaroid img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+  }
+  .polaroid .caption {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: #2A1F3D;
+    text-align: center;
+    margin-top: 8px;
+    line-height: 1.35;
+  }
+
+  .artifact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 900px;
+    width: 100%;
+    margin: 24px auto 0;
+  }
+  .artifact {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .artifact-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    min-width: 36px;
+  }
+  .artifact-name {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-bright);
+    min-width: 200px;
+  }
+  .artifact-desc {
+    font-size: 13px;
+    color: var(--ink-muted);
+    flex: 1;
+  }
+
+  .day-timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    width: 100%;
+    margin-top: 24px;
+  }
+  .day-tile {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 18px;
+    padding: 36px 24px;
+    backdrop-filter: blur(20px);
+    text-align: center;
+  }
+  .day-num {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 80px;
+    line-height: 1;
+    background: linear-gradient(120deg, var(--grad-3), var(--grad-1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 14px;
+    letter-spacing: -0.03em;
+  }
+  .day-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    margin-bottom: 14px;
+  }
+  .day-body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .day-body strong { color: var(--ink-bright); font-weight: 500; }
+
+  .receipts-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    max-width: 1400px;
+    width: 100%;
+    margin-top: 12px;
+  }
+  .receipt-mini {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 14px 16px 12px;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+  }
+  .receipt-mini p {
+    font-family: 'Fraunces', serif;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    font-style: italic;
+    margin-bottom: 10px;
+    flex: 1;
+  }
+  .receipt-mini cite {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9.5px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-style: normal;
+    border-top: 1px solid var(--panel-border);
+    padding-top: 9px;
+    line-height: 1.4;
+  }
+
+  /* Word cloud slide */
+  .cloud-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px 56px;
+    margin: 4px 0 22px;
+    text-align: center;
+  }
+  .cloud-stat {
+    min-width: 110px;
+  }
+  .cloud-stat-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(28px, 3.2vw, 44px);
+    line-height: 1;
+    background: linear-gradient(120deg, var(--grad-3), var(--grad-1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .cloud-stat-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  .cloud-container {
+    width: 100%;
+    max-width: 1400px;
+    height: clamp(380px, 52vh, 560px);
+    min-height: 380px;
+    flex-shrink: 0;
+    margin: 0 auto;
+    position: relative;
+  }
+  .cloud-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 60px rgba(168, 179, 255, 0.12));
+  }
+
+  /* Wall slide override — compress to fit one viewport, no scroll */
+  .slide.wall {
+    padding: 40px 48px 70px;
+    justify-content: flex-start;
+  }
+  .slide.wall .slide-eyebrow {
+    margin-bottom: 14px;
+  }
+  .slide.wall h2 {
+    font-size: clamp(22px, 2.8vw, 40px);
+    margin-bottom: 8px;
+  }
+  .slide.wall .subtitle {
+    font-size: 14px;
+    margin-bottom: 14px;
+    max-width: 900px;
+  }
+  .slide.wall .receipts-strip {
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 6px;
+  }
+  .slide.wall .receipt-mini p {
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+  .slide.wall .receipt-mini cite {
+    font-size: 9px;
+    padding-top: 8px;
+  }
+  @media (max-width: 1100px) {
+    .slide.wall .receipts-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .slide.wall .receipts-strip { grid-template-columns: 1fr; }
+    .slide.wall { padding: 32px 20px 60px; }
+  }
+
+  /* Deep testimonials (fuller quotes, 2x2 grid) */
+  .receipts-deep {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    max-width: 1240px;
+    width: 100%;
+    margin-top: 18px;
+  }
+  .receipt-deep {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 24px 26px;
+    position: relative;
+    backdrop-filter: blur(20px);
+    opacity: 0;
+  }
+  .receipt-deep::before {
+    content: '\201C';
+    position: absolute;
+    top: 6px;
+    left: 18px;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .receipt-deep p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 6px 0 16px;
+    position: relative;
+  }
+  .receipt-deep cite {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-style: normal;
+    display: block;
+    border-top: 1px solid var(--panel-border);
+    padding-top: 10px;
+  }
+
+  /* Logo / partnership wall (text-as-logos) */
+  .logo-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px 28px;
+    max-width: 1100px;
+    width: 100%;
+    margin-top: 12px;
+    padding: 28px 0;
+    border-top: 1px solid var(--panel-border);
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .logo-cell {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    text-align: center;
+    padding: 6px 0;
+    opacity: 0;
+    transition: color 0.3s ease;
+  }
+  .logo-cell:hover { color: var(--accent); }
+
+  /* Three pillars (recap) */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    max-width: 1100px;
+    width: 100%;
+    margin-top: 22px;
+  }
+  .pillar {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 28px 22px;
+    backdrop-filter: blur(20px);
+  }
+  .pillar-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--accent);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .pillar-body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* Notable achievements (2-column bullet grid) */
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 40px;
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+  }
+  .achievement {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 18px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    backdrop-filter: blur(20px);
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    opacity: 0;
+  }
+  .achievement:hover {
+    background: rgba(28, 22, 56, 0.7);
+    border-left-color: var(--accent-bright);
+    transform: translateX(4px);
+  }
+  .achievement-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--accent);
+    font-size: 22px;
+    line-height: 1;
+    padding-top: 2px;
+    min-width: 18px;
+  }
+  .achievement-body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .achievement-body strong {
+    color: var(--ink-bright);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+  }
+
+  /* Three big vectors slide */
+  .vectors {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 16px;
+    align-items: start;
+  }
+  .vector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 12px 8px 0;
+    min-height: 140px;
+  }
+  .vector-word {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(28px, 3.4vw, 48px);
+    line-height: 1.05;
+    background: linear-gradient(120deg, var(--grad-3), var(--grad-1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+  .vector-body {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    line-height: 1.7;
+    max-width: 32ch;
+  }
+
+  /* Sign-off */
+  .signoff-name {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(60px, 8vw, 120px);
+    background: linear-gradient(120deg, var(--grad-3), var(--grad-1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 28px;
+  }
+  .signoff-credit {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    line-height: 2;
+    text-align: center;
+  }
+  .signoff-credit .ready {
+    color: var(--accent);
+    font-size: 14px;
+    margin-top: 18px;
+    display: block;
+  }
+  .signoff-links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 28px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  .signoff-links a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(168, 179, 255, 0.3);
+    padding-bottom: 2px;
+    transition: all 0.2s ease;
+  }
+  .signoff-links a:hover {
+    color: var(--accent-bright);
+    border-bottom-color: var(--accent);
+  }
+
+  /* Navigation */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    background: linear-gradient(0deg, rgba(7,5,15,0.85), transparent);
+    pointer-events: none;
+  }
+  .nav-bar > * { pointer-events: auto; }
+  .nav-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  .nav-meta span { color: var(--accent); }
+  .nav-counter {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.18em;
+  }
+  .nav-counter strong { color: var(--accent); font-weight: 500; }
+  .nav-dots { display: flex; gap: 8px; }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(168, 179, 255, 0.2);
+    border: 1px solid var(--panel-border);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .dot:hover { background: rgba(168, 179, 255, 0.5); }
+  .dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+    transform: scale(1.4);
+  }
+  .nav-hint {
+    position: fixed;
+    top: 24px;
+    right: 32px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    .slide { padding: 60px 20px 90px; }
+    .quotes-pair { grid-template-columns: 1fr; }
+    .day-timeline { grid-template-columns: 1fr; }
+    .polaroid-wall { grid-template-columns: repeat(2, 1fr); }
+    .pillars { grid-template-columns: 1fr; }
+    .vectors { grid-template-columns: 1fr; }
+    .timeline { grid-template-columns: 1fr; gap: 24px; padding-top: 8px; }
+    .timeline::before { display: none; }
+    .timeline-node::before { left: 8px; transform: translateY(-50%); }
+    .timeline-node { text-align: left; padding-left: 28px; padding-top: 0; }
+    .receipts-deep { grid-template-columns: 1fr; }
+    .achievements-grid { grid-template-columns: 1fr; gap: 10px; }
+    .nav-bar { padding: 14px 16px; }
+    .nav-meta { display: none; }
+    .hero-ask { gap: 24px; }
+    .artifact { flex-wrap: wrap; }
+    .artifact-name { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="atmosphere"></div>
+<div class="stars" id="stars"></div>
+<div class="nav-hint">← → SPACE · CLICK · DOTS</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · TITLE -->
+  <section class="slide" data-slide="1" data-glow="rgba(168, 179, 255, 0.25)">
+    <div class="slide-portrait"><img src="images/izzy-portrait.jpg" alt="Izzy Piyale-Sheard"></div>
+    <div class="slide-eyebrow">For Mighty Pro · CSM</div>
+    <h1>Izzy <span class="accent">Piyale-Sheard</span></h1>
+    <div class="subtitle">A 14-slide brief for Jocelyn and the Mighty Pro team. May 2026.</div>
+  </section>
+
+  <!-- 2 · NOTABLE ACHIEVEMENTS -->
+  <section class="slide" data-slide="2" data-glow="rgba(168, 179, 255, 0.30)">
+    <div class="slide-eyebrow">§ 01 · At a Glance</div>
+    <h2>Direct from the resume. <em>The metric bullets.</em></h2>
+    <div class="achievements-grid" data-stagger>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body"><strong>60</strong> customer implementations at Dutchie, <strong>#4</strong> company-wide on the implementation leaderboard.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body">Scaled monthly community events from <strong>150 → 650+</strong> (<strong>400%+</strong> growth) across <strong>6</strong> Canadian cities at Lighthouse Labs.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body"><strong>#1</strong> ticket closer for <strong>3 consecutive months</strong>. Up to <strong>237 tickets/month</strong> on a team of 8+ specialists.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body">Built <strong>30+</strong> strategic partnerships with McKinsey, PwC, Microsoft, RBC, and CIBC Digital.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body">Created the <strong>T1-to-engineering escalation format</strong> adopted company-wide. Cut investigation + resolution time by <strong>50%</strong>.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body">Organized Canada's first <strong>freeCodeCamp conference</strong>: 300+ attendees, 20 speakers, founder Quincy Larson, sub-$1K budget.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body">Authored documentation that ramped <strong>8</strong> Canadian Implementation hires in 2022.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body">Facilitated <strong>7</strong> international Hacker Paradise retreats across Indonesia, Japan, Taiwan, Thailand, Spain, Vietnam, Portugal.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body">Led <strong>5</strong> Canadian go-to-market features with Product + Engineering in 2022 (Barcode Scanning, Catalog Uploads, ASN, more).</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body"><strong>200+</strong> professionals coached 1:1 through ClearCareer. <strong>98%</strong> satisfaction rate. <strong>NPS 84</strong>.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body">Launched Dutchie's <strong>first Canadian retail location</strong> in 2019. Wrote the compliance + deployment playbook still in use.</div></div>
+      <div class="achievement"><span class="achievement-mark">·</span><div class="achievement-body"><strong>$1.2M+</strong> in documented client raises. <strong>$21.7K</strong> average. <strong>8 of 8</strong> LinkedIn service reviews at 5.0★.</div></div>
+    </div>
+  </section>
+
+  <!-- 3 · VIDEO REEL -->
+  <section class="slide" data-slide="3" data-glow="rgba(255, 184, 217, 0.28)">
+    <div class="slide-eyebrow">§ 02 · Hear it from them</div>
+    <h2>Real clients. Real outcomes. <em>Three minutes.</em></h2>
+    <div class="reel-frame">
+      <iframe src="https://www.youtube.com/embed/HLQ4uncTZOw" title="ClearCareer Client Testimonials" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <div class="reel-meta">Charla Fogle · Jorge Garboza · Victor Perez · Marsha Druker <a href="https://youtu.be/HLQ4uncTZOw?si=J888m_4why7GG3Iz" target="_blank" rel="noreferrer">Watch on YouTube →</a></div>
+  </section>
+
+  <!-- 2 · THE RARE BLEND -->
+  <section class="slide" data-slide="3" data-glow="rgba(168, 179, 255, 0.30)">
+    <div class="slide-eyebrow">§ 03 · The Rare Blend</div>
+    <h2>Three vectors. <em>One candidate.</em></h2>
+    <div class="vectors" data-stagger>
+      <div class="vector">
+        <div class="vector-word">Entrepreneurship.</div>
+        <div class="vector-body">A live coaching practice. Renewal math every quarter for 200+ clients.</div>
+      </div>
+      <div class="vector">
+        <div class="vector-word">Customer Success.</div>
+        <div class="vector-body">60 Dutchie implementations including enterprise rollouts at scale.</div>
+      </div>
+      <div class="vector">
+        <div class="vector-word">Community.</div>
+        <div class="vector-body">Lighthouse Labs 150 → 650+. Hacker Paradise across 7 countries.</div>
+      </div>
+    </div>
+    <div class="subtitle" style="margin-top: 32px;">Across every Mighty conversation, the team came back to this combination.</div>
+  </section>
+
+  <!-- 3 · THE 60-HOST SCALE -->
+  <section class="slide" data-slide="4" data-glow="rgba(212, 165, 255, 0.25)">
+    <div class="slide-eyebrow">§ 04 · The 60-Host Scale</div>
+    <h2>I've carried a book this size. <em>Before.</em></h2>
+    <div class="stat-grid" data-stagger>
+      <div class="stat-tile">
+        <div class="label">Dutchie implementations</div>
+        <div class="num" data-count="60">0</div>
+        <div class="body">43 live · 17 ongoing · #4 company-wide on the leaderboard.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Live coaching book</div>
+        <div class="num" data-count="200" data-suffix="+">0</div>
+        <div class="body">Professionals coached 1:1 through ClearCareer. Documented outcomes.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Lighthouse event scale</div>
+        <div class="num">150 → 650+</div>
+        <div class="body">Monthly attendees across 6 Canadian cities. Repeatable models, local champions.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · OUTCOMES REPORT -->
+  <section class="slide" data-slide="5" data-glow="rgba(255, 184, 217, 0.25)">
+    <div class="slide-eyebrow">§ 05 · Outcomes Report</div>
+    <h2>Receipts you can verify <em>on the public site.</em></h2>
+    <div class="subtitle">58 surveyed members · joinclearcareer.com/outcomes</div>
+    <div class="stat-grid" data-stagger>
+      <div class="stat-tile">
+        <div class="label">NPS Score</div>
+        <div class="num" data-count="84">0</div>
+        <div class="body">71% gave a perfect 10/10 recommend.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Avg salary increase</div>
+        <div class="num" data-count="21.7" data-prefix="$" data-suffix="K" data-decimals="1">$0K</div>
+        <div class="body">42% secured $20K+. Two exceeded $50K.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Five-star rating</div>
+        <div class="num" data-count="84" data-suffix="%">0%</div>
+        <div class="body">49 of 58. Overall avg 4.84 / 5.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Collective raises</div>
+        <div class="num">$1.2M+</div>
+        <div class="body">Documented in the public outcomes report.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · RENEWALS = SALES -->
+  <section class="slide" data-slide="6" data-glow="rgba(212, 165, 255, 0.25)">
+    <div class="slide-eyebrow">§ 06 · The Implementation Muscle</div>
+    <h2>Built the playbook <em>& trained the team.</em></h2>
+    <div class="subtitle" style="margin-bottom: 16px;">Sole Canadian implementer in 2019. Wrote every SOP and deployment playbook for the Canadian market. Then onboarded the new strategists who executed the dozen go-lives.</div>
+    <div class="pullquote" data-typewriter>
+      <p>"Izzy set us up to win on the Canada launch. New markets are never easy, but he got us into a place where we did a dozen go-lives in Canada in two weeks, and an even better place going into August and September."</p>
+      <cite>Chris Ridings · VP of Implementation · Dutchie</cite>
+    </div>
+  </section>
+
+  <!-- 6 · RENEWAL MATH -->
+  <section class="slide" data-slide="7" data-glow="rgba(168, 179, 255, 0.25)">
+    <div class="slide-eyebrow">§ 06 · The Negotiation Muscle</div>
+    <h2>When clients work with me, <em>they negotiate up.</em></h2>
+    <div class="subtitle" style="margin-bottom: 12px;">ClearCareer coaching outcomes. Same craft that earns a renewal.</div>
+    <div class="stat-grid" data-stagger>
+      <div class="stat-tile">
+        <div class="label">Clients negotiated higher</div>
+        <div class="num" data-count="84" data-suffix="%">0%</div>
+        <div class="body">31 of 37 members who landed during the program negotiated above their offered base.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Secured $20K+ raises</div>
+        <div class="num" data-count="42" data-suffix="%">0%</div>
+        <div class="body">14 secured $20K+. Two exceeded $50K. One surpassed $100K.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Landed during program</div>
+        <div class="num" data-count="64" data-suffix="%">0%</div>
+        <div class="body">37 of 58 members. 46% landed within a single month.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · SYSTEM-BUILDER DNA -->
+  <section class="slide" data-slide="8" data-glow="rgba(255, 184, 217, 0.25)">
+    <div class="slide-eyebrow">§ 07 · System-Builder DNA</div>
+    <h2>I write the playbook <em>when there isn't one.</em></h2>
+    <div class="stat-grid" data-stagger>
+      <div class="stat-tile">
+        <div class="label">Escalation SOP</div>
+        <div class="num" data-count="50" data-suffix="%">0%</div>
+        <div class="body">First T1 → engineering escalation framework. Cut investigation and resolution time in half.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Canadian team ramp</div>
+        <div class="num" data-count="8">0</div>
+        <div class="body">Authored documentation that ramped 8 Canadian Implementation hires in 2022.</div>
+      </div>
+      <div class="stat-tile">
+        <div class="label">Team rituals</div>
+        <div class="num" data-count="2020">0</div>
+        <div class="body">Built the first Implementation + Support standups when the team was distributed.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · ENGINEERING VOICES -->
+  <section class="slide" data-slide="9" data-glow="rgba(212, 165, 255, 0.25)">
+    <div class="slide-eyebrow">§ 07 · The Engineers Said</div>
+    <h2>Two Dutchie engineers, <em>on working with me.</em></h2>
+    <div class="quotes-pair">
+      <div class="pullquote">
+        <p>"He invented the standard T1 dev escalated format. He always presents his issues to the engineers clearly with all the detail required while cutting out the cruft and confusion."</p>
+        <cite>Doug Longnecker · Software Engineer · Dutchie</cite>
+      </div>
+      <div class="pullquote">
+        <p>"His escalated tickets have the requisite details. Izzy works with me on the technical reasons behind tickets so we can either avoid the problem or find a fix together."</p>
+        <cite>Tom Wonneberger · Software Engineer · Dutchie</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · EXECUTIVE ROOM PRESENCE -->
+  <section class="slide" data-slide="10" data-glow="rgba(255, 212, 168, 0.25)">
+    <div class="slide-eyebrow">§ 08 · Executive Room</div>
+    <h2>Founders, COOs, 7-figure creators.<br><em>No junior energy.</em></h2>
+    <div class="subtitle" style="margin-bottom: 16px;">25+ large events, training sessions, and high-value partnerships across 14 years.</div>
+    <div class="logo-wall" data-stagger>
+      <div class="logo-cell">UofT</div>
+      <div class="logo-cell">Microsoft</div>
+      <div class="logo-cell">McKinsey</div>
+      <div class="logo-cell">PwC</div>
+      <div class="logo-cell">RBC</div>
+      <div class="logo-cell">CIBC Digital</div>
+      <div class="logo-cell">freeCodeCamp</div>
+      <div class="logo-cell">FlexJobs</div>
+      <div class="logo-cell">Lighthouse Labs</div>
+      <div class="logo-cell">NPower Canada</div>
+      <div class="logo-cell">TMU</div>
+      <div class="logo-cell">Humber</div>
+    </div>
+    <div class="subtitle" style="margin-top: 18px; font-size: 14px;">+ 4 CBC Radio segments · Quoted in Global News, Newsweek, Inc.com, freeCodeCamp, Thought Catalog</div>
+  </section>
+
+  <!-- 11 · BUILD FROM NOTHING -->
+  <section class="slide" data-slide="11" data-glow="rgba(168, 179, 255, 0.28)">
+    <div class="slide-eyebrow">§ 09 · Build from Nothing</div>
+    <h2>Four times I've built something <em>from nothing.</em></h2>
+    <div class="subtitle" style="margin-bottom: 8px;">Four chapters. Same instinct: open a doc, start scoping.</div>
+    <div class="timeline" data-stagger>
+      <div class="timeline-node">
+        <div class="timeline-years">2015 · 2016</div>
+        <div class="timeline-name">Hacker Paradise</div>
+        <div class="timeline-body">7 international retreats. Cohorts of 30 to 40, curated from 50 to 100 applicants per trip.</div>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-years">2016 · 2018</div>
+        <div class="timeline-name">Lighthouse Labs</div>
+        <div class="timeline-body">Events 150 → 650+ across 6 cities. 30+ partnerships with McKinsey, PwC, Microsoft, RBC.</div>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-years">2019 · 2023</div>
+        <div class="timeline-name">Dutchie</div>
+        <div class="timeline-body">60 implementations including enterprise rollouts. Operationally launched the Canadian market in 2019.</div>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-years">2016 · Now</div>
+        <div class="timeline-name">ClearCareer</div>
+        <div class="timeline-body">200+ documented clients. 8/8 LinkedIn reviews at 5.0 stars. 98% satisfaction.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · 90-DAY RAMP -->
+  <section class="slide" data-slide="12" data-glow="rgba(255, 184, 217, 0.25)">
+    <div class="slide-eyebrow">§ 10 · 90 Days, One Bet</div>
+    <h2>Move <em>AI Cohost adoption</em> on my book from baseline to leader.</h2>
+    <div class="day-timeline" data-stagger>
+      <div class="day-tile">
+        <div class="day-num">30</div>
+        <div class="day-label">Day · Baseline + first playbook</div>
+        <div class="day-body"><strong>Audit AI Cohost adoption across my book.</strong> Identify the 3-5 highest-leverage Hosts. Ship the first activation playbook for new Pro Host onboarding.</div>
+      </div>
+      <div class="day-tile">
+        <div class="day-num">60</div>
+        <div class="day-label">Day · Adoption sprint</div>
+        <div class="day-body"><strong>Drive activation on the at-risk segment.</strong> Tie AI Cohost usage to measurable Host outcomes. Document what worked.</div>
+      </div>
+      <div class="day-tile">
+        <div class="day-num">90</div>
+        <div class="day-label">Day · Tested system + first renewal</div>
+        <div class="day-body"><strong>Ship "AI Cohost Activation by Host Stage"</strong> covering new, established, and mega-creators. Pair with an adoption dashboard. Own my first renewal.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · OFF THE RECORD -->
+  <section class="slide" data-slide="13" data-glow="rgba(255, 212, 168, 0.28)">
+    <div class="slide-eyebrow">§ 11 · A Fun New Addition</div>
+    <h2>A fun new addition <em>to the team.</em></h2>
+    <div class="polaroid-wall">
+      <div class="polaroid"><img src="images/freecodecamp.jpeg" alt="freeCodeCamp"><div class="caption">Hosted the world's first freeCodeCamp conference.</div></div>
+      <div class="polaroid"><img src="images/startupfest.JPG" alt="Startupfest"><div class="caption">Startupfest, on stage.</div></div>
+      <div class="polaroid"><img src="images/html500.jpeg" alt="HTML500"><div class="caption">HTML500. Speaking in front of 500 prospective developers.</div></div>
+      <div class="polaroid"><img src="images/pikachu.png" alt="Nasdaq bell ringing"><div class="caption">Rang the NASDAQ Bell in 2016.</div></div>
+      <div class="polaroid"><img src="images/linkedin.jpeg" alt="LinkedIn talk"><div class="caption">LinkedIn talk at Lighthouse Labs.</div></div>
+      <div class="polaroid"><img src="images/lighthouse-labs-community.JPG" alt="Lighthouse Labs"><div class="caption">Lighthouse Labs community day.</div></div>
+      <div class="polaroid"><img src="images/webinar.jpeg" alt="Webinar"><div class="caption">FlexJobs webinar. 800 live, 100% valuable.</div></div>
+      <div class="polaroid"><img src="images/taiwanese-gameshow.gif" alt="Taiwanese game show"><div class="caption">Yes, I was on a Taiwanese game show.</div></div>
+    </div>
+  </section>
+
+  <!-- 15 · WORD CLOUD -->
+  <section class="slide" data-slide="15" data-glow="rgba(212, 165, 255, 0.32)">
+    <div class="slide-eyebrow">§ 12 · The Pattern</div>
+    <h2>377 testimonials. <em>One shape.</em></h2>
+    <div class="cloud-stats">
+      <div class="cloud-stat">
+        <div class="cloud-stat-num">377</div>
+        <div class="cloud-stat-label">Verbatim testimonials</div>
+      </div>
+      <div class="cloud-stat">
+        <div class="cloud-stat-num">234+</div>
+        <div class="cloud-stat-label">Named individuals</div>
+      </div>
+      <div class="cloud-stat">
+        <div class="cloud-stat-num">4</div>
+        <div class="cloud-stat-label">Distinct sources</div>
+      </div>
+      <div class="cloud-stat">
+        <div class="cloud-stat-num">4,400+</div>
+        <div class="cloud-stat-label">People who gave feedback</div>
+      </div>
+    </div>
+    <div class="cloud-container">
+      <canvas id="word-cloud-canvas"></canvas>
+    </div>
+    <div class="subtitle" style="margin-top: 14px; font-size: 13px;">The words people use most when describing my work. Filtered for descriptors, not subject matter.</div>
+  </section>
+
+  <!-- 16 · DUTCHIE WALL -->
+  <section class="slide wall" data-slide="16" data-glow="rgba(168, 179, 255, 0.32)">
+    <div class="slide-eyebrow">§ 13 · The Dutchie Wall</div>
+    <h2>14 colleagues. <em>Three years of work.</em></h2>
+    <div class="subtitle" style="margin-bottom: 12px;">Senior leadership, a peer Enterprise CSM in the exact role, engineering, T1 Support.</div>
+    <div class="receipts-strip" data-stagger>
+      <div class="receipt-mini"><p>"Izzy set us up to win on the Canada launch. New markets are never easy, but he got us into a place where we did a dozen go-lives in Canada in two weeks, and an even better place going into August and September."</p><cite>Chris Ridings · VP Implementation · Dutchie</cite></div>
+      <div class="receipt-mini"><p>"Six go-lives in a single week. That was the real start of our Canada operation, and Izzy's diligence is what got us there. His dedication to our clients managing through long days doesn't go unnoticed."</p><cite>Josh Deitch · Sr Director of Implementation · Dutchie</cite></div>
+      <div class="receipt-mini"><p>"The most positive and responsive person. Izzy is always available to help troubleshoot with clients and take on any trainings. He remains calm under pressure and focused. I have yet to have had a time when he has not been willing to help out."</p><cite>Melanie Nefzger · Enterprise Customer Success Manager · Dutchie</cite></div>
+      <div class="receipt-mini"><p>"Izzy is easy to work with. He invented the standard T1 dev escalated format. He always presents his issues to the engineers clearly with all the detail required while cutting out the cruft and confusion."</p><cite>Doug Longnecker · Software Engineer · Dutchie</cite></div>
+      <div class="receipt-mini"><p>"Izzy is honestly a pleasure to work with. He is always upbeat and has grown a lot in his understanding of the system. Izzy works with me on the technical reasons behind tickets in order to understand what is happening and then work with the client on either avoiding this problem or finding a fix."</p><cite>Tom Wonneberger · Software Engineer · Dutchie</cite></div>
+      <div class="receipt-mini"><p>"Izzy has been extremely helpful with getting me ramped being brand new to the Tier 1 role. He'd sign onto Zoom at 9am to teach me Zoho and the backend until it actually clicked. The reason I closed 40+ tickets in my first six weeks is directly because of Izzy."</p><cite>Maria DiBenedetto · Implementation Strategist · T1 Support · Dutchie</cite></div>
+      <div class="receipt-mini"><p>"Izzy is one of the most energetic and helpful people I have met at this company. He is more than happy to hop on calls when needed or help newer teammates learn the ropes. Izzy is a true role model of what it takes to be successful at LeafLogix."</p><cite>Darin Mellor · Implementation Strategist · T1 Support · Dutchie</cite></div>
+      <div class="receipt-mini"><p>"Immense gratitude to YOU, Izzy. For being someone we can always count on, creating a standard and making processes repeatable and scalable. When faced with a problem, you take it head on."</p><cite>Kathy Young · Implementation Strategist · Dutchie</cite></div>
+    </div>
+  </section>
+
+  <!-- 17 · CLIENTS, WORKSHOPS, COMMUNITY -->
+  <section class="slide wall" data-slide="17" data-glow="rgba(212, 165, 255, 0.30)">
+    <div class="slide-eyebrow">§ 14 · Clients, Workshops, Community</div>
+    <h2>The other side of <em>the same work.</em></h2>
+    <div class="subtitle" style="margin-bottom: 12px;">ClearCareer client outcomes. Workshop attendees. Hacker Paradise alumni.</div>
+    <div class="receipts-strip" data-stagger>
+      <div class="receipt-mini"><p>"With his help I landed an internal Associate Director role and secured a $25K pay increase, far exceeding my expectations. Izzy is a master at reframing perspective, boosting confidence, and setting you up for success."</p><cite>Chris Chipman · Associate Director · Programs and Business Development</cite></div>
+      <div class="receipt-mini"><p>"Received two job offers in a week and negotiated 30% higher salary."</p><cite>Henrique Perez · ClearCareer client</cite></div>
+      <div class="receipt-mini"><p>"I landed the role and bumped my salary by $22,000 a year, more than a 30% increase. Izzy is a warm, caring, and impactful coach that really knows his stuff."</p><cite>Laura Salamanca · ClearCareer client</cite></div>
+      <div class="receipt-mini"><p>"I landed a role with a $20,000 salary increase plus annual bonuses, giving me the financial stability I needed for my family. Izzy is a game-changer. 10 out of 10."</p><cite>Tamara Gordon · Career Changer · ClearCareer client</cite></div>
+      <div class="receipt-mini"><p>"Izzy is a wizard. I went to his workshop on utilizing AI to build a resume, prep for interviews, and succeed in the job search with ease. Izzy has broken down the fundamentals of impactful career coaching into AI models to make excellent resume writing, email writing, and interviewing accessible. He's also a genuine person who wants to see you succeed."</p><cite>Ellie Hoekman · FlexJobs workshop attendee</cite></div>
+      <div class="receipt-mini"><p>"I was blown away by a recent session Izzy led on 10 AI Strategies to Level Up Your Job Search. This session gave me a boost in hope and confidence in my job search efforts. Highly recommend Izzy."</p><cite>Barbara Dye · FlexJobs workshop attendee</cite></div>
+      <div class="receipt-mini"><p>"You'd be hard-pressed to find a single ex-participant of Hacker Paradise who does not consider Izzy to be a friend."</p><cite>Heidi Priebe · Writer · Thought Catalog</cite></div>
+      <div class="receipt-mini"><p>"Izzy ran Hacker Paradise pretty much alone for a large chunk of time, and everything worked out great. Reliability is what I look for."</p><cite>Jeremy Sharvit · Software Engineer</cite></div>
+    </div>
+    <div class="subtitle" style="margin-top: 16px; font-size: 14px;"><strong style="color: var(--ink-bright);">377+ documented testimonials</strong> across clients, colleagues, workshop attendees, and community alumni.</div>
+  </section>
+
+  <!-- 18 · RECAP + SIGN-OFF -->
+  <section class="slide" data-slide="18" data-glow="rgba(168, 179, 255, 0.25)">
+    <div class="slide-eyebrow">§ 15 · If you only had thirty seconds</div>
+    <h2>I've done this work. <em>Here's the bet.</em></h2>
+    <div class="pillars" data-stagger>
+      <div class="pillar">
+        <div class="pillar-title">Carries the book.</div>
+        <div class="pillar-body">60 implementations including enterprise rollouts. 200+ coaching. The shape of the work is the same. The product label changes.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Earns the renewal.</div>
+        <div class="pillar-body">Renewal-as-sales is my weekly operating mode. 84% of clients negotiated higher than offered base.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Builds the systems.</div>
+        <div class="pillar-body">Where SOPs don't exist, I write them. AI is a lever for prep. Never for the call itself.</div>
+      </div>
+    </div>
+    <div class="signoff-name" style="margin-top: 24px; font-size: clamp(28px, 3.5vw, 48px);">Ready when the team is.</div>
+    <div class="signoff-credit">
+      Izzy Piyale-Sheard · Toronto, ON
+      <span class="ready">Prepared for Jocelyn · Mary · Michael · Denika · Ryan</span>
+    </div>
+    <div class="signoff-links">
+      <a href="https://linkedin.com/in/izzydoesizzy" target="_blank" rel="noreferrer">LinkedIn →</a>
+      <a href="https://youtu.be/HLQ4uncTZOw" target="_blank" rel="noreferrer">YouTube reel →</a>
+      <a href="https://joinclearcareer.com/outcomes" target="_blank" rel="noreferrer">Outcomes report →</a>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav-bar">
+  <div class="nav-meta">For <span>Mighty Pro</span> · Slides</div>
+  <div class="nav-dots" id="dots"></div>
+  <div class="nav-counter"><strong id="current">1</strong> / <span id="total">18</span></div>
+</div>
+
+<script>
+  // Word cloud data (descriptive words only)
+  const WORD_CLOUD_DATA = [
+    ["helped", 39], ["recommend", 30], ["helpful", 30], ["useful", 22],
+    ["informative", 21], ["confidence", 17], ["learned", 16], ["landed", 16],
+    ["interesting", 15], ["insightful", 14], ["support", 14], ["valuable", 14],
+    ["confident", 12], ["coach", 12], ["understand", 12], ["advice", 11],
+    ["learn", 11], ["insights", 10], ["engaging", 9], ["professional", 9],
+    ["experience", 9], ["actionable", 9], ["clear", 8], ["personal", 8],
+    ["perspective", 8], ["worth", 8], ["understanding", 8], ["value", 8],
+    ["learning", 8], ["relevant", 8], ["incredibly", 8], ["coaching", 7],
+    ["negotiated", 7], ["guidance", 7], ["navigate", 7], ["truly", 7],
+    ["excited", 7], ["invaluable", 7], ["practical", 7], ["linkedin", 6],
+    ["industry", 6], ["examples", 6], ["important", 6], ["seekers", 6],
+    ["shared", 6], ["incredible", 5], ["genuine", 5], ["mentor", 5],
+    ["community", 5], ["caring", 5], ["thoughtful", 4], ["leadership", 4],
+    ["mentorship", 4], ["systems", 4], ["growth", 4],
+  ];
+
+  const CLOUD_PALETTE = ['#FFD4A8', '#FFB8D9', '#D4A5FF', '#B8C2FF', '#A8B3FF', '#7C5BFF'];
+
+  function renderWordCloud(canvas) {
+    if (!window.WordCloud) {
+      console.warn('[deck] WordCloud library not loaded');
+      return;
+    }
+    const container = canvas.parentElement;
+    const w = container.offsetWidth || 1200;
+    const h = container.offsetHeight || 480;
+    if (w < 50 || h < 50) {
+      console.warn('[deck] cloud container too small', w, h);
+      return;
+    }
+    canvas.width = w;
+    canvas.height = h;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+
+    try {
+      WordCloud(canvas, {
+        list: WORD_CLOUD_DATA,
+        fontFamily: 'Fraunces, Georgia, serif',
+        fontWeight: '400',
+        weightFactor: function (size) {
+          return Math.pow(size, 1.05) * (w / 720);
+        },
+        color: function (word, weight) {
+          if (weight >= 25) return CLOUD_PALETTE[0];
+          if (weight >= 17) return CLOUD_PALETTE[1];
+          if (weight >= 12) return CLOUD_PALETTE[2];
+          if (weight >= 9)  return CLOUD_PALETTE[3];
+          if (weight >= 6)  return CLOUD_PALETTE[4];
+          return CLOUD_PALETTE[5];
+        },
+        rotateRatio: 0.35,
+        rotationSteps: 2,
+        backgroundColor: 'transparent',
+        gridSize: 8,
+        drawOutOfBound: false,
+        shrinkToFit: true,
+      });
+    } catch (e) {
+      console.error('[deck] WordCloud render error:', e);
+    }
+  }
+
+  // Re-render cloud on window resize
+  let cloudResizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(cloudResizeTimer);
+    cloudResizeTimer = setTimeout(function () {
+      const active = document.querySelector('.slide.active');
+      const canvas = active && active.querySelector('#word-cloud-canvas');
+      if (canvas) renderWordCloud(canvas);
+    }, 200);
+  });
+
+  // Generate stars
+  const starsContainer = document.getElementById('stars');
+  for (let i = 0; i < 100; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.animationDelay = (Math.random() * 4) + 's';
+    star.style.animationDuration = (3 + Math.random() * 3) + 's';
+    if (Math.random() > 0.7) {
+      star.style.width = '3px';
+      star.style.height = '3px';
+    }
+    starsContainer.appendChild(star);
+  }
+
+  // Slide controller
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('dots');
+  const currentEl = document.getElementById('current');
+  const totalEl = document.getElementById('total');
+  const stars = document.getElementById('stars');
+  const root = document.documentElement;
+  let currentIdx = 0;
+  totalEl.textContent = slides.length;
+
+  slides.forEach((slide, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.title = 'Slide ' + (i + 1);
+    dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); });
+    dotsContainer.appendChild(dot);
+  });
+  const dots = document.querySelectorAll('.dot');
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= slides.length || idx === currentIdx) return;
+    const direction = idx > currentIdx ? 1 : -1;
+
+    slides[currentIdx].classList.remove('active');
+    slides[currentIdx].classList.add('prev');
+
+    slides[idx].classList.remove('prev');
+    slides[idx].classList.add('active');
+
+    slides.forEach((s, i) => {
+      if (i !== currentIdx && i !== idx) s.classList.remove('prev');
+    });
+
+    stars.style.transform = 'translateX(' + (-direction * 40) + 'px)';
+    setTimeout(() => stars.style.transform = '', 800);
+
+    currentIdx = idx;
+    currentEl.textContent = idx + 1;
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+
+    const glow = slides[idx].dataset.glow;
+    if (glow) root.style.setProperty('--slide-glow', glow);
+
+    triggerAnimations(slides[idx]);
+  }
+
+  function triggerAnimations(slide) {
+    const staggerContainers = slide.querySelectorAll('[data-stagger]');
+    staggerContainers.forEach(container => {
+      const items = Array.from(container.children);
+      items.forEach((item, i) => {
+        gsap.killTweensOf(item);
+        const initialX = item.classList.contains('artifact') ? -20 : 0;
+        const initialY = item.classList.contains('artifact') ? 0 : 20;
+        gsap.fromTo(item,
+          { opacity: 0, x: initialX, y: initialY },
+          { opacity: 1, x: 0, y: 0, duration: 0.7, delay: 0.15 + i * 0.08, ease: 'power3.out' }
+        );
+      });
+    });
+
+    const counters = slide.querySelectorAll('[data-count]');
+    counters.forEach(counter => {
+      const target = parseFloat(counter.dataset.count);
+      const prefix = counter.dataset.prefix || '';
+      const suffix = counter.dataset.suffix || '';
+      const decimals = parseInt(counter.dataset.decimals || '0');
+      const format = counter.dataset.format;
+      const obj = { val: 0 };
+      gsap.killTweensOf(obj);
+      gsap.to(obj, {
+        val: target,
+        duration: 1.8,
+        delay: 0.4,
+        ease: 'power2.out',
+        onUpdate: () => {
+          let displayVal;
+          if (format === 'comma') {
+            displayVal = Math.floor(obj.val).toLocaleString();
+          } else if (decimals > 0) {
+            displayVal = obj.val.toFixed(decimals);
+          } else {
+            displayVal = Math.floor(obj.val);
+          }
+          counter.textContent = prefix + displayVal + suffix;
+        }
+      });
+    });
+
+    const polaroids = slide.querySelectorAll('.polaroid');
+    if (polaroids.length) {
+      polaroids.forEach((p, i) => {
+        gsap.killTweensOf(p);
+        const rotation = (Math.random() - 0.5) * 12;
+        gsap.fromTo(p,
+          { opacity: 0, y: -300, rotation: rotation - 25, scale: 0.85 },
+          { opacity: 1, y: 0, rotation: rotation, scale: 1, duration: 0.95, delay: 0.2 + i * 0.10, ease: 'back.out(1.4)' }
+        );
+      });
+    }
+
+    // Word cloud render (canvas) — wait for slide transition to settle
+    const cloudCanvas = slide.querySelector('#word-cloud-canvas');
+    if (cloudCanvas) {
+      setTimeout(function () {
+        if (window.WordCloud) {
+          renderWordCloud(cloudCanvas);
+        } else {
+          // Library not yet loaded — retry once
+          setTimeout(function () { renderWordCloud(cloudCanvas); }, 500);
+        }
+      }, 750);
+    }
+    // Cloud stats reveal
+    const cloudStats = slide.querySelectorAll('.cloud-stat');
+    if (cloudStats.length) {
+      cloudStats.forEach((stat, i) => {
+        gsap.killTweensOf(stat);
+        gsap.fromTo(stat,
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.6, delay: 0.05 + i * 0.08, ease: 'power3.out' }
+        );
+      });
+    }
+
+    const typewriterEl = slide.querySelector('[data-typewriter] p');
+    if (typewriterEl) {
+      if (!typewriterEl.dataset.originalText) {
+        typewriterEl.dataset.originalText = typewriterEl.textContent;
+      }
+      const text = typewriterEl.dataset.originalText;
+      typewriterEl.textContent = '';
+      let charIdx = 0;
+      const speed = 22;
+      if (typewriterEl._interval) clearInterval(typewriterEl._interval);
+      typewriterEl._interval = setInterval(() => {
+        typewriterEl.textContent = text.slice(0, charIdx);
+        charIdx++;
+        if (charIdx > text.length) {
+          clearInterval(typewriterEl._interval);
+          typewriterEl._interval = null;
+        }
+      }, speed);
+    }
+  }
+
+  // Init
+  slides[0].classList.add('active');
+  dots[0].classList.add('active');
+  root.style.setProperty('--slide-glow', slides[0].dataset.glow || 'rgba(168, 179, 255, 0.25)');
+  setTimeout(() => triggerAnimations(slides[0]), 400);
+
+  // Keyboard nav
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      goTo(currentIdx + 1);
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      goTo(currentIdx - 1);
+    }
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End') goTo(slides.length - 1);
+  });
+
+  // Click to advance
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.dot') || e.target.closest('a') || e.target.closest('.nav-bar')) return;
+    goTo(currentIdx + 1);
+  });
+</script>
+</body>
+</html>
