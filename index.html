@@ -979,6 +979,72 @@
     max-width: 32ch;
   }
 
+  /* Thanks slide */
+  .thanks-body {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(16px, 1.6vw, 21px);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 780px;
+    text-align: center;
+    margin: 0 auto 20px;
+  }
+  .thanks-body strong {
+    color: var(--ink-bright);
+    font-weight: 500;
+    font-style: italic;
+  }
+  .thanks-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 22px 36px;
+    background: linear-gradient(135deg, rgba(168, 179, 255, 0.08), rgba(255, 184, 217, 0.08));
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    max-width: 620px;
+    margin: 0 auto;
+    text-decoration: none;
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+  .thanks-cta:hover {
+    transform: translateY(-2px);
+    border-color: rgba(168, 179, 255, 0.45);
+    background: linear-gradient(135deg, rgba(168, 179, 255, 0.16), rgba(255, 184, 217, 0.14));
+  }
+  .thanks-cta-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    margin-bottom: 2px;
+  }
+  .thanks-cta-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(18px, 1.9vw, 24px);
+    color: var(--ink-bright);
+    text-align: center;
+    line-height: 1.3;
+  }
+  .thanks-cta-title em {
+    background: linear-gradient(120deg, var(--grad-1), var(--grad-3));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-style: italic;
+  }
+  .thanks-cta-arrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    margin-top: 6px;
+  }
+
   /* Sign-off */
   .signoff-name {
     font-family: 'DM Serif Display', serif;
@@ -1480,10 +1546,22 @@
         <div class="pillar-body">Where SOPs don't exist, I write them. AI is a lever for prep. Never for the call itself.</div>
       </div>
     </div>
-    <div class="signoff-name" style="margin-top: 24px; font-size: clamp(28px, 3.5vw, 48px);">Ready when the team is.</div>
+  </section>
+
+  <section class="slide" data-slide="19" data-glow="rgba(255, 184, 217, 0.28)">
+    <div class="slide-eyebrow">§ 16 · Thank you</div>
+    <h2>Thank you, <em>truly.</em></h2>
+    <div class="thanks-body">
+      To <strong>Jocelyn</strong>, <strong>Mary</strong>, <strong>Michael</strong>, <strong>Denika</strong>, and <strong>Ryan</strong> — for the questions, the candor, and the time. I learned something in every conversation.
+    </div>
+    <a class="thanks-cta" href="testimonials/" target="_blank" rel="noreferrer">
+      <div class="thanks-cta-eyebrow">Want more?</div>
+      <div class="thanks-cta-title">100+ full testimonials, <em>in their own words.</em></div>
+      <div class="thanks-cta-arrow">View the wall →</div>
+    </a>
+    <div class="signoff-name" style="margin-top: 24px; font-size: clamp(28px, 3.5vw, 48px);">Whatever you decide, <em>thank you.</em></div>
     <div class="signoff-credit">
       Izzy Piyale-Sheard · Toronto, ON
-      <span class="ready">Prepared for Jocelyn · Mary · Michael · Denika · Ryan</span>
     </div>
     <div class="signoff-links">
       <a href="https://linkedin.com/in/izzydoesizzy" target="_blank" rel="noreferrer">LinkedIn →</a>
@@ -1497,7 +1575,7 @@
 <div class="nav-bar">
   <div class="nav-meta">For <span>Mighty Pro</span> · Slides</div>
   <div class="nav-dots" id="dots"></div>
-  <div class="nav-counter"><strong id="current">1</strong> / <span id="total">18</span></div>
+  <div class="nav-counter"><strong id="current">1</strong> / <span id="total">19</span></div>
 </div>
 
 <script>
