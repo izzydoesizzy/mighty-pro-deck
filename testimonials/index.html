@@ -146,10 +146,10 @@
   /* Stat banner */
   .stat-banner {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 0;
     margin: 0 auto 52px;
-    max-width: 1180px;
+    max-width: 1040px;
     background: linear-gradient(135deg, rgba(168, 179, 255, 0.04), rgba(255, 184, 217, 0.03));
     border-top: 1px solid var(--panel-border);
     border-bottom: 1px solid var(--panel-border);
@@ -232,9 +232,11 @@
   .rotator-cite {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     transition: opacity 0.5s ease;
   }
+  .rotator-cite-text { text-align: left; }
   .rotator-cite .avatar { width: 38px; height: 38px; font-size: 13px; }
   .rotator-cite-text { display: flex; flex-direction: column; gap: 2px; }
   .rotator-name { font-family: 'Fraunces', serif; font-size: 15px; color: var(--ink-bright); font-weight: 500; }
@@ -265,14 +267,13 @@
     margin-bottom: 40px;
   }
   .filter-inner { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-  .filter-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
-  .filter-label {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    margin-right: 8px;
+  .filter-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; }
+  .filter-divider {
+    width: 1px;
+    height: 22px;
+    background: var(--panel-border);
+    margin: 0 8px;
+    display: inline-block;
   }
   .chip {
     font-family: 'Geist Mono', monospace;
@@ -280,7 +281,7 @@
     color: var(--ink-soft);
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    padding: 8px 14px;
+    padding: 6px 12px;
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 999px;
@@ -301,7 +302,7 @@
     border-color: var(--grad-2);
   }
   .chip-icon { font-size: 13px; line-height: 1; }
-  .chip-count { color: var(--ink-faint); font-size: 9.5px; margin-left: 2px; }
+  .chip-count { color: var(--ink-faint); font-size: 9.5px; margin-left: 4px; }
   .chip.active .chip-count { color: var(--ink-soft); }
   .search-box { position: relative; }
   .search-input {
@@ -311,8 +312,8 @@
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 999px;
-    padding: 9px 18px 9px 36px;
-    min-width: 240px;
+    padding: 8px 16px 8px 34px;
+    min-width: 210px;
     outline: none;
     transition: border-color 0.2s ease;
   }
@@ -705,10 +706,6 @@
         <span class="stat-label">NPS · 71% rated<br>10/10</span>
       </div>
       <div class="stat">
-        <span class="stat-num" data-static="8 of 8">8 of 8</span>
-        <span class="stat-label">LinkedIn reviews<br>5.0★</span>
-      </div>
-      <div class="stat">
         <span class="stat-num" data-target="377" data-format="int">0</span>
         <span class="stat-label">Total documented<br>voices</span>
       </div>
@@ -730,25 +727,19 @@
   <div class="filter-bar">
     <div class="filter-inner">
       <div class="filter-row" id="themeChips">
-        <span class="filter-label">By topic</span>
         <button class="chip theme-chip active" data-theme="all">All</button>
-        <button class="chip theme-chip" data-theme="renewals"><span class="chip-icon">💬</span>Renewals & negotiation<span class="chip-count" id="t-renewals"></span></button>
-        <button class="chip theme-chip" data-theme="systems"><span class="chip-icon">🧩</span>Systems & playbooks<span class="chip-count" id="t-systems"></span></button>
-        <button class="chip theme-chip" data-theme="ai"><span class="chip-icon">🤖</span>AI & tooling<span class="chip-count" id="t-ai"></span></button>
-        <button class="chip theme-chip" data-theme="calm"><span class="chip-icon">🧘</span>Calm under pressure<span class="chip-count" id="t-calm"></span></button>
-        <button class="chip theme-chip" data-theme="mentor"><span class="chip-icon">🤝</span>Mentor & coach<span class="chip-count" id="t-mentor"></span></button>
-        <button class="chip theme-chip" data-theme="implementation"><span class="chip-icon">🚀</span>Implementation<span class="chip-count" id="t-implementation"></span></button>
-        <button class="chip theme-chip" data-theme="community"><span class="chip-icon">🌍</span>Community<span class="chip-count" id="t-community"></span></button>
-        <button class="chip theme-chip" data-theme="outcomes"><span class="chip-icon">📈</span>Outcomes & numbers<span class="chip-count" id="t-outcomes"></span></button>
-      </div>
-      <div class="filter-row" id="sourceChips">
-        <span class="filter-label">By source</span>
-        <button class="chip active" data-filter="all">All<span class="chip-count" id="count-all"></span></button>
+        <button class="chip theme-chip" data-theme="renewals"><span class="chip-icon">💬</span>Renewals<span class="chip-count" id="t-renewals"></span></button>
+        <button class="chip theme-chip" data-theme="systems"><span class="chip-icon">🧩</span>Systems<span class="chip-count" id="t-systems"></span></button>
+        <button class="chip theme-chip" data-theme="ai"><span class="chip-icon">🤖</span>AI<span class="chip-count" id="t-ai"></span></button>
+        <button class="chip theme-chip" data-theme="calm"><span class="chip-icon">🧘</span>Calm<span class="chip-count" id="t-calm"></span></button>
+        <button class="chip theme-chip" data-theme="mentor"><span class="chip-icon">🤝</span>Mentor<span class="chip-count" id="t-mentor"></span></button>
+        <span class="filter-divider" aria-hidden="true"></span>
+        <button class="chip" data-filter="all">All<span class="chip-count" id="count-all"></span></button>
         <button class="chip" data-filter="dutchie">Dutchie<span class="chip-count" id="count-dutchie"></span></button>
         <button class="chip" data-filter="clearcareer">ClearCareer<span class="chip-count" id="count-clearcareer"></span></button>
         <button class="chip" data-filter="hacker-paradise">Hacker Paradise<span class="chip-count" id="count-hacker-paradise"></span></button>
         <button class="chip" data-filter="workshop">Workshop<span class="chip-count" id="count-workshop"></span></button>
-        <div class="search-box" style="margin-left: 12px;">
+        <div class="search-box">
           <span class="search-icon">⌕</span>
           <input class="search-input" id="search" type="text" placeholder="Search names or words…">
         </div>
@@ -765,19 +756,22 @@
 
   <div class="section-header">
     <span class="section-eyebrow">§ 02 · Systems & playbooks</span>
-    <span class="section-title">"He <em>invented the standard.</em>"</span>
+    <span class="section-title">"He invented <em>the standard format.</em>"</span>
+    <span class="section-count">— Doug Longnecker, Dutchie</span>
   </div>
   <div class="strip" id="stripSystems"></div>
 
   <div class="section-header">
     <span class="section-eyebrow">§ 03 · Renewals & negotiation</span>
     <span class="section-title">"Even after they said they <em>couldn't go higher.</em>"</span>
+    <span class="section-count">— Jorge Garboza</span>
   </div>
   <div class="strip" id="stripRenewals"></div>
 
   <div class="section-header">
     <span class="section-eyebrow">§ 04 · AI & tooling</span>
-    <span class="section-title">"He <em>demystified AI</em> completely."</span>
+    <span class="section-title">"Izzy <em>demystified AI</em> completely."</span>
+    <span class="section-count">— Laura Salamanca</span>
   </div>
   <div class="strip" id="stripAI"></div>
 
@@ -875,7 +869,8 @@
 
   function cardInnerHtml(t, opts) {
     const isHighlight = !!opts.highlight;
-    const needsExpand = !isHighlight && t.quote.length > TRUNCATE;
+    const inStrip = !!opts.inStrip;
+    const needsExpand = !isHighlight && !inStrip && t.quote.length > TRUNCATE;
     const av = avatarForName(t.name);
     let quoteHtml;
     if (needsExpand) {
@@ -932,32 +927,26 @@
     highlightsEl.appendChild(cardEl(t, { highlight: true, cls: 'pos-' + (i + 1) }));
   });
 
-  // Themed strips
-  function pickStrip(theme, count, excludeIds) {
-    const pool = data.filter(t => !t.highlight && !excludeIds.has(t.id) && t.themes && t.themes.includes(theme));
-    pool.sort((a, b) => {
-      const score = (t) => {
-        const L = t.quote.length;
-        if (L < 100) return -1000 + L;
-        if (L > 500) return 200 - (L - 500);
-        return L;
-      };
-      return score(b) - score(a);
-    });
-    return pool.slice(0, count);
-  }
+  // Themed strips: deterministic hand-picked IDs per theme
+  const STRIP_IDS = {
+    stripSystems: ['doug-longnecker', 'chris-mcaulay-gilbart', 'faith-keen'],
+    stripRenewals: ['jorge-garboza', 'henrique-perez', 'blake-mcdermott'],
+    stripAI: ['laura-salamanca', 'athena-hernandez', 'ellie-hoekman'],
+  };
+  const byId = new Map(data.map(t => [t.id, t]));
   const usedInStrips = new Set();
-  function renderStrip(elId, theme) {
+  function renderStrip(elId) {
     const el = document.getElementById(elId);
-    const picks = pickStrip(theme, 3, usedInStrips);
-    picks.forEach(t => {
-      usedInStrips.add(t.id);
-      el.appendChild(cardEl(t));
+    STRIP_IDS[elId].forEach(id => {
+      const t = byId.get(id);
+      if (!t) { console.warn('Strip ID not found:', id); return; }
+      usedInStrips.add(id);
+      el.appendChild(cardEl(t, { inStrip: true }));
     });
   }
-  renderStrip('stripSystems', 'systems');
-  renderStrip('stripRenewals', 'renewals');
-  renderStrip('stripAI', 'ai');
+  renderStrip('stripSystems');
+  renderStrip('stripRenewals');
+  renderStrip('stripAI');
 
   // Main grid
   const gridEl = document.getElementById('grid');
@@ -985,8 +974,9 @@
       const t = data.find(x => x.id === id);
       if (!t) return;
       const isHighlight = /\bpos-\d/.test(card.className);
+      const inStrip = !!card.closest('.strip');
       const wasExpanded = card.classList.contains('expanded');
-      card.innerHTML = cardInnerHtml(t, { highlight: isHighlight });
+      card.innerHTML = cardInnerHtml(t, { highlight: isHighlight, inStrip });
       if (wasExpanded) card.classList.add('expanded');
     });
     bindExpand(document);
@@ -1014,17 +1004,18 @@
     document.getElementById('empty').classList.toggle('show', visibleCount === 0);
   }
 
-  document.querySelectorAll('#sourceChips .chip').forEach(chip => {
+  // Source chips have data-filter; theme chips have data-theme
+  document.querySelectorAll('.chip[data-filter]').forEach(chip => {
     chip.addEventListener('click', () => {
-      document.querySelectorAll('#sourceChips .chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.chip[data-filter]').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       activeSource = chip.dataset.filter;
       applyFilters();
     });
   });
-  document.querySelectorAll('#themeChips .chip').forEach(chip => {
+  document.querySelectorAll('.chip[data-theme]').forEach(chip => {
     chip.addEventListener('click', () => {
-      document.querySelectorAll('#themeChips .chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.chip[data-theme]').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       activeTheme = chip.dataset.theme;
       reDecorateAll();
