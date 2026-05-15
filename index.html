@@ -781,6 +781,49 @@
     line-height: 1.55;
   }
 
+  /* Rotating identity text on title slide */
+  .hero-rotating {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 12px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(20px, 2.2vw, 32px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .hero-rotating-prefix {
+    color: var(--ink-muted);
+    font-style: normal;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.6em;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transform: translateY(-3px);
+  }
+  .hero-rotating-word {
+    display: inline-block;
+    background: linear-gradient(120deg, var(--grad-3), var(--grad-2), var(--grad-1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    min-width: 280px;
+    text-align: left;
+    will-change: opacity, transform;
+  }
+  .hero-rotating-word.out {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  .hero-rotating-word.in {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
   /* Notable achievements (2-column bullet grid) */
   .achievements-grid {
     display: grid;
@@ -1018,7 +1061,10 @@
     <div class="slide-portrait" style="margin-bottom: 20px;"><img src="images/izzy-portrait.jpg" alt="Izzy Piyale-Sheard"></div>
     <div class="slide-eyebrow" style="margin-bottom: 18px;">For Mighty Pro · Customer Success Manager</div>
     <h1 style="margin-bottom: 14px;">Izzy <span class="accent">Piyale-Sheard</span></h1>
-    <h2 style="font-size: clamp(24px, 3.2vw, 44px); margin: 0 0 22px; max-width: 1280px;">Entrepreneur. Enterprise CSM. Community builder. <em>Same person.</em></h2>
+    <div class="hero-rotating" style="margin: 0 0 24px;">
+      <span class="hero-rotating-prefix">I'm a</span>
+      <span class="hero-rotating-word" id="rotating-word">negotiator.</span>
+    </div>
     <div style="font-family: 'Geist Mono', monospace; font-size: clamp(13px, 1.2vw, 17px); letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); padding: 12px 28px; border-top: 1px solid var(--panel-border); border-bottom: 1px solid var(--panel-border); max-width: 1100px;">14 years · 60 implementations · 200+ coached · 377 testimonials</div>
   </section>
 
@@ -1493,6 +1539,39 @@
       }
     }, 300);
   });
+
+  // Rotating identity text on title slide
+  const ROTATING_WORDS = [
+    'negotiator.',
+    'coach.',
+    'systems builder.',
+    'community builder.',
+    'mentor.',
+    'closer.',
+    'host.',
+    'strategist.',
+    'CSM.',
+    'team trainer.',
+    'problem solver.',
+    'playbook author.',
+  ];
+  (function initRotatingWord() {
+    const el = document.getElementById('rotating-word');
+    if (!el) return;
+    let idx = 0;
+    setInterval(function () {
+      el.classList.add('out');
+      setTimeout(function () {
+        idx = (idx + 1) % ROTATING_WORDS.length;
+        el.textContent = ROTATING_WORDS[idx];
+        el.classList.remove('out');
+        el.classList.add('in');
+        // force reflow then animate back in
+        void el.offsetWidth;
+        el.classList.remove('in');
+      }, 360);
+    }, 2400);
+  })();
 
   // Generate stars
   const starsContainer = document.getElementById('stars');
