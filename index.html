@@ -545,6 +545,65 @@
   }
   .day-body strong { color: var(--ink-bright); font-weight: 500; }
 
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 1280px;
+    width: 100%;
+    margin-top: 14px;
+  }
+  .project-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 14px;
+    padding: 18px 20px 16px;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  .project-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    margin-bottom: 8px;
+  }
+  .project-title {
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    line-height: 1.2;
+    color: var(--ink-bright);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .project-body {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    flex: 1;
+    margin-bottom: 12px;
+  }
+  .project-attr {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    padding-top: 10px;
+    border-top: 1px solid var(--panel-border);
+  }
+  .project-coda {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-top: 18px;
+    text-align: center;
+  }
+
   .receipts-strip {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1034,6 +1093,7 @@
     .slide { padding: 60px 20px 90px; }
     .quotes-pair { grid-template-columns: 1fr; }
     .day-timeline { grid-template-columns: 1fr; }
+    .project-grid { grid-template-columns: 1fr; }
     .polaroid-wall { grid-template-columns: repeat(2, 1fr); }
     .pillars { grid-template-columns: 1fr; }
     .vectors { grid-template-columns: 1fr; }
@@ -1344,25 +1404,48 @@
   </section>
 
   <section class="slide" data-slide="16" data-glow="rgba(255, 184, 217, 0.25)">
-    <div class="slide-eyebrow">§ 13 · 90 Days, One Bet</div>
-    <h2>Move <em>AI Cohost adoption</em> on my book from baseline to leader.</h2>
-    <div class="day-timeline" data-stagger>
-      <div class="day-tile">
-        <div class="day-num">30</div>
-        <div class="day-label">Day · Baseline + first playbook</div>
-        <div class="day-body"><strong>Audit AI Cohost adoption across my book.</strong> Identify the 3-5 highest-leverage Hosts. Ship the first activation playbook for new Pro Host onboarding.</div>
+    <div class="slide-eyebrow">§ 13 · What I'd love to ship</div>
+    <h2>Six projects. <em>All named in our conversations.</em></h2>
+    <div class="subtitle" style="margin-bottom: 8px;">Every one came up in an interview. Attribution is who said it first.</div>
+    <div class="project-grid" data-stagger>
+      <div class="project-card">
+        <div class="project-tag">Renewals</div>
+        <div class="project-title">Renewal Rehearsal Studio</div>
+        <div class="project-body">An AI voice agent CSMs use to rehearse renewals, expansions, and save plays before they happen. Multi-scenario, with feedback after each rep.</div>
+        <div class="project-attr">From my chat with Michael</div>
       </div>
-      <div class="day-tile">
-        <div class="day-num">60</div>
-        <div class="day-label">Day · Adoption sprint</div>
-        <div class="day-body"><strong>Drive activation on the at-risk segment.</strong> Tie AI Cohost usage to measurable Host outcomes. Document what worked.</div>
+      <div class="project-card">
+        <div class="project-tag">Team</div>
+        <div class="project-title">The CSM Superpower Library</div>
+        <div class="project-body">A living archive of what each CSM does best. Each teammate contributes their go-to play; everyone pulls from the same shelf.</div>
+        <div class="project-attr">From my chat with Michael</div>
       </div>
-      <div class="day-tile">
-        <div class="day-num">90</div>
-        <div class="day-label">Day · Tested system + first renewal</div>
-        <div class="day-body"><strong>Ship "AI Cohost Activation by Host Stage"</strong> covering new, established, and mega-creators. Pair with an adoption dashboard. Own my first renewal.</div>
+      <div class="project-card">
+        <div class="project-tag">VIP</div>
+        <div class="project-title">VIP Pre-Event Swarm Protocol</div>
+        <div class="project-body">Pre-show demo, live monitoring, post-event analysis for Tony / Tyler / Jefferson tier launches. Turn the highest-stakes moments into choreography.</div>
+        <div class="project-attr">From my chat with Ryan</div>
+      </div>
+      <div class="project-card">
+        <div class="project-tag">Knowledge</div>
+        <div class="project-title">Living SOPs that don't drift</div>
+        <div class="project-body">Lightweight QA layer that re-validates SOPs when product ships underneath them. Flags stale steps before a Host hits them.</div>
+        <div class="project-attr">From my chat with Ryan</div>
+      </div>
+      <div class="project-card">
+        <div class="project-tag">Forecasting</div>
+        <div class="project-title">DWI Save-Play</div>
+        <div class="project-body">Apply the lessons from the April face-plant to the next DWI cohort renewal. Build a cohort-specific churn-risk model behind it.</div>
+        <div class="project-attr">From my chat with Ryan</div>
+      </div>
+      <div class="project-card">
+        <div class="project-tag">Tooling</div>
+        <div class="project-title">Gong → Next 1:1 Pipeline</div>
+        <div class="project-body">As Gong rolls out, build the workflow that turns each recorded call into a structured prep doc for the next Host conversation.</div>
+        <div class="project-attr">From my chat with Mary</div>
       </div>
     </div>
+    <div class="project-coda">Pick any one. Or all six. <em>I'd start tomorrow.</em></div>
   </section>
 
   <section class="slide" data-slide="17" data-glow="rgba(255, 212, 168, 0.28)">
